@@ -1,0 +1,110 @@
+USE [DevAssessment]
+GO
+
+ALTER TABLE [dbo].[ContactPreferance] DROP CONSTRAINT [DF__ContactPr__DateL__164452B1]
+GO
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ContactPreferance](
+	[ContactPreferance] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[DateLogged] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ContactPreferance] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[ContactPreferance] ADD  DEFAULT (getdate()) FOR [DateLogged]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Gender](
+	[GenderID] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](10) NOT NULL,
+	[DateLogged] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[GenderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Gender] ADD  DEFAULT (getdate()) FOR [DateLogged]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Department](
+	[DepartmentID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[DateLogged] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[DepartmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Department] ADD  DEFAULT (getdate()) FOR [DateLogged]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Student](
+	[IDNumber] [int] IDENTITY(1,1) NOT NULL,
+	[FullName] [nvarchar](50) NOT NULL,
+	[Surname] [nvarchar](50) NOT NULL,
+	[GenderID] [int] NULL,
+	[Email] [nvarchar](50) NOT NULL,
+	[PhoneNumber] [nvarchar](20) NOT NULL,
+	[ContactPreference] [int] NULL,
+	[DepartmentID] [int] NULL,
+	[IsActive] [bit] NOT NULL,
+	[PhotoPath] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IDNumber] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Student] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[Student]  WITH CHECK ADD FOREIGN KEY([ContactPreference])
+REFERENCES [dbo].[ContactPreferance] ([ContactPreferance])
+GO
+
+ALTER TABLE [dbo].[Student]  WITH CHECK ADD FOREIGN KEY([DepartmentID])
+REFERENCES [dbo].[Department] ([DepartmentID])
+GO
+
+ALTER TABLE [dbo].[Student]  WITH CHECK ADD FOREIGN KEY([GenderID])
+REFERENCES [dbo].[Gender] ([GenderID])
+GO
